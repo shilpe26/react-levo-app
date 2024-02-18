@@ -9,10 +9,9 @@ export interface Article {
   image_url: string
 }
 
-export const fetchArticles = async (): Promise<Article[]> => {
+export const fetchArticles = async (limit: number, offset: number): Promise<Article[]> => {
   try {
-    const response = await axios.get<{ results: Article[] }>('https://api.spaceflightnewsapi.net/v4/articles/');
-  
+    const response = await axios.get<{ results: Article[] }>(`https://api.spaceflightnewsapi.net/v4/articles/?limit=${limit}&offset=${offset}`);
     return response.data?.results || [];
   } catch (error) {
     console.error('Error fetching articles:', error);

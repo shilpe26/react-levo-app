@@ -11,16 +11,19 @@ export const ArticleList = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const articlesData = await fetchArticles();
+      const articlesData = await fetchArticles(displayedArticles, 0);
       setArticles(articlesData);
       setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [displayedArticles]);
 
-  const handleLoadMore = () => {
+  const handleLoadMore = async () => {
+    const moreArticles = await fetchArticles(6, displayedArticles);
+    setArticles(prevArticles => [...prevArticles, ...moreArticles]);
     setDisplayedArticles(displayedArticles + 6);
   };
+
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold text-center mt-8 mb-4">Spaceflight News Articles</h1>
@@ -41,7 +44,7 @@ export const ArticleList = () => {
             ))}
 
           </ul>
-          {articles.length > displayedArticles && (
+          {articles.length >= displayedArticles && (
             <div className="flex justify-center pb-8">
               <LoadMoreButton onClick={handleLoadMore} />
             </div>
